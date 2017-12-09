@@ -122,10 +122,6 @@ module idler_holder()
           fillet_dif_y (r=in_fillet, h = hold_bas_l, xdir=1, zdir=1, fillet=1);
       } //end of difference
 
-      // union: element 2
-      translate ([aluprof_w,0,0])
-      {
-        difference () {
       /* --------------- step 03 --------------------------- 
          The main box
                                   aluprof_w   Z      Z
@@ -153,6 +149,11 @@ module idler_holder()
                                                Y
 
       */
+      // union: element 2
+      translate ([aluprof_w,0,0])
+      {
+        difference () {
+
           cube([hold_w, hold_l, hold_h]);
 
       /* --------------- step 04 --------------------------- 

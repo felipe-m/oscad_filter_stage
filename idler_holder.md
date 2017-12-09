@@ -6,6 +6,8 @@ Check the source file [idler_holder.scad](src/idler_holder.scad)
 
 You may want to check the steps for the [idler tensioner](./idler_tensioner.md) 
 
+Back to the [readme.md](./readme.md)
+
 # Steps
 
 ## Step 00: Includes and module creation

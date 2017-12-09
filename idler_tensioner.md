@@ -4,6 +4,10 @@
 
 Check the source file [idler_tensioner.scad](src/idler_tensioner.scad)
 
+You may want to check the steps for the [idler holder](./idler_holder.md) 
+
+Back to the [readme.md](./readme.md)
+
 # Steps
 
 

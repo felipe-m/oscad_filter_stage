@@ -1,6 +1,6 @@
 # One-axis stage to move a filter
 
-Designed with openSCAD
+Designed with [OpenSCAD](http://www.openscad.org)
 
 
 ```
@@ -8,6 +8,9 @@ Designed with openSCAD
     +--- oscad_utils: functions in OpenSCAD, https://github.com/felipe-m/oscad_utils
  +--- stl: Parts exported to STL
  +--- imgs: Images of the 4 parts in png format
+    +--- small: reduced size images
+    +--- idler_hold_steps: images for the step by step explanation for the idler holder
+    +--- idler_tens_steps: images for the step by step explanation for the idler tensioner
 ```
 
  oscad_utils: are OpenSCAD functions to make bolts, chamfers and fillets, check https://github.com/felipe-m/oscad_utils
