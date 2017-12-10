@@ -45,7 +45,7 @@ include <oscad_utils/bolt_sizes.scad> // include to use the constants
 use <oscad_utils/fillet.scad>
 use <oscad_utils/bolts.scad>  
 // where the constants are defined
-include <idler_cte.scad>
+include <kidler.scad>
 
 module idler_tens ()
 {
@@ -200,7 +200,7 @@ module idler_tens ()
            :...... tens_l .........:
     */                    
     translate ([tens_w/2., tens_l - idler_r_xtr, -1])
-        cylinder (r=boltidler_r_tol, h= tens_w +2, $fa=1, $fs=0.5);
+        cylinder (r=boltidler_r_tol, h= tens_h +2, $fa=1, $fs=0.5);
 
     /* --------------- step 06 --------------------------- 
       Hole for the leadscrew (stroke):

@@ -68,7 +68,7 @@ include <oscad_utils/bolt_sizes.scad> // include to use the constants
 use <oscad_utils/fillet.scad>
 use <oscad_utils/bolts.scad>  
 // where the constants are defined
-include <idler_cte.scad>
+include <kidler.scad>
 
 module idler_holder()
 {
