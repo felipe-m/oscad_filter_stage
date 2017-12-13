@@ -1,77 +1,34 @@
-/* Idler holder
-  ----------------------------------------------------------------------------
-  -- (c) Felipe Machado
-  -- Area of Electronic Technology. Rey Juan Carlos University (urjc.es)
-  -- https://github.com/felipe-m
-  -- December-2017
-  ----------------------------------------------------------------------------
-  --- LGPL Licence
-  ----------------------------------------------------------------------------
+# OpenSCAD detailed steps for the tensioner holder
 
+![Idler Holder](imgs/small/tens_holder.png )
 
-                   
-                    ________   
-                   /______ /|  
-                  |  ___  | |     Z               
-                  | |   | |/\     :
-                  | |___| |\ \    :
-              ____|_______| \ \___:
-      X....../___/ \       \ \/__/| 
-             |______\_______\____|/
-                                 .
-                                .
-                               .
-                              Y
-                                              Z      Z
-                                              :      :
-                               _______        :      :______________
-                              |  ___  |       :      |  __________  |
-                              | |   | |       :      | |__________| |
-                             /| |___| |\      :      |________      |
-                            / |_______| \     :      |        |    /      
-                    .. ____/  |       |  \____:      |________|  /
-        hold_bas_h.+..|_::____|_______|____::_|      |___::___|/......Y
- 
-                       .... hold_bas_w ........
-                      :        .hold_w.        :
-                      :       :    wall_thick  :
-                      :       :      +         :
-                      :       :     : :        :
-               X......:_______:_____:_:________:....
-                      |    |  | :   : |  |     |    :
-                      |  O |  | :   : |  |  O  |    + hold_bas_l
-                      |____|__| :   : |__|_____|....:
-                              | :   : |        :
-                              |_:___:_|        :
-                                               :
-                                               :
-                                               :
-                                               Y
+Check the source file [tensioner_holder.scad](src/tensioner_holder.scad)
 
+You may want to check the steps for the [idler tensioner](./idler_tensioner.md) 
 
+Back to the [readme.md](./readme.md)
 
-                   ___:___          
-                  |  ___  |         
-                  | | 1 | |         
-                 /| |___| |\       
-                / |_______| \      
-           ____/  |       |  \____ ...
-          |_::____|___2___|____::_|..: holder_base_z
+# Steps
 
+## Step 00: Includes and module creation
 
-*/
-
-
-
-
+```cpp
 include <oscad_utils/bolt_sizes.scad> // include to use the constants
 use <oscad_utils/fillet.scad>
 use <oscad_utils/bolts.scad>  
 // where the constants are defined
 include <kidler.scad>
 
-module idler_holder()
+module tensioner_holder()
 {
+
+```
+
+
+## Step 01: Create the base
+Everything else will cut the box:
+
+```cpp
   difference () {
     union () 
     {
@@ -96,7 +53,15 @@ module idler_holder()
         */
 
         cube([hold_bas_w, hold_bas_l, hold_bas_h]);
+```
 
+
+![Step 01](imgs/small/tens_hold_steps/tens_hold_xyz_st01.png )
+
+
+## Step 02: Fillet the base
+
+```cpp
       /* --------------- step 02 --------------------------- 
          Fillet the base
          The piece will be printed on the XZ plane, so this fillet will be 
@@ -122,6 +87,13 @@ module idler_holder()
           fillet_dif_y (r=in_fillet, h = hold_bas_l, xdir=1, zdir=1, fillet=1);
       } //end of difference
 
+```
+![Step 02](imgs/small/tens_hold_steps/tens_hold_xyz_st02.png )
+![Step 02](imgs/small/tens_hold_steps/tens_hold_xz_st02.png )
+
+## Step 03: The main box
+
+```cpp
       /* --------------- step 03 --------------------------- 
          The main box
                                   aluprof_w   Z      Z
@@ -153,9 +125,16 @@ module idler_holder()
       translate ([aluprof_w,0,0])
       {
         difference () {
-
           cube([hold_w, hold_l, hold_h]);
 
+```
+![Step 03](imgs/small/tens_hold_steps/tens_hold_xyz_st03.png )
+![Step 03](imgs/small/tens_hold_steps/tens_hold_xz_st03.png )
+
+
+## Step 04: Fillets on top
+
+```cpp
       /* --------------- step 04 --------------------------- 
          Fillets on top
                                   aluprof_w   Z
@@ -175,7 +154,16 @@ module idler_holder()
           // Fillet f2
           translate ([hold_w,0, hold_h])
             fillet_dif_y (r=in_fillet, h=hold_l, xdir=1,zdir=1,fillet=1);
+ 
 
+```
+![Step 04](imgs/small/tens_hold_steps/tens_hold_xyz_st04.png )
+![Step 04](imgs/small/tens_hold_steps/tens_hold_xz_st04.png )
+
+
+## Step 05: Large chamfer at the bottom
+
+```cpp
       /* --------------- step 05 --------------------------- 
          large chamfer at the bottom
 
@@ -209,11 +197,27 @@ module idler_holder()
           //               hold_h - (tens_h+2*wall_thick));
           // option A: using less material
           chmf_rad = min(hold_l-hold_bas_l+ hold_bas_h,
-                         hold_h + hold_bas_h - (tens_h+2*wall_thick));
+                         hold_h - (tens_h+2*wall_thick));
           translate ([0, hold_l,0])
             fillet_dif_x (r=chmf_rad, h= hold_w,
                           ydir=1, zdir=-1, fillet=0);
 
+
+
+```
+Option A:
+
+![Step 05a](imgs/small/tens_hold_steps/tens_hold_xyz_st05_a.png )
+![Step 05a](imgs/small/tens_hold_steps/tens_hold_yz_st05_a.png )
+
+Option B:
+
+![Step 05b](imgs/small/tens_hold_steps/tens_hold_xyz_st05_b.png )
+![Step 05b](imgs/small/tens_hold_steps/tens_hold_yz_st05_b.png )
+
+## Step 06: Hole for the tensioner
+
+```cpp
       /* --------------- step 06 --------------------------- 
          Hole for the tensioner
                                               Z      Z
@@ -252,6 +256,20 @@ module idler_holder()
             }
           } 
 
+```
+![Step 06](imgs/small/tens_hold_steps/tens_hold_xyz_st06_a.png )
+![Step 06](imgs/small/tens_hold_steps/tens_hold_yz_st06_a.png )
+
+Optional chamfers:
+
+![Step 06](imgs/small/tens_hold_steps/tens_hold_xz_st06_a_chmf.png )
+![Step 06](imgs/small/tens_hold_steps/tens_hold_yz_st06_a_chmf.png )
+
+
+
+## Step 07: A hole to be able to see inside, could be on one side or both
+
+```cpp
       /* --------------- step 07 --------------------------- 
          A hole to be able to see inside, could be on one side or both
                                               Z      Z
@@ -280,6 +298,15 @@ module idler_holder()
                     hold_l - nut_holder_thick - 2* wall_thick,
                     2*m4_nut_ap_tol]);
           }
+
+```
+![Step 07](imgs/small/tens_hold_steps/tens_hold_xyz_st07_a.png )
+![Step 07](imgs/small/tens_hold_steps/tens_hold_yz_st07_a.png )
+
+
+## Step 08: Hole for the leadscrew
+
+```cpp
       /* --------------- step 08 --------------------------- 
          A hole for the leadscrew
                                               Z      Z
@@ -298,7 +325,13 @@ module idler_holder()
             cylinder (r=bolttens_r_tol, h=wall_thick+2, $fa=1, $fs=0.5); 
         }
       }
+```
+![Step 08](imgs/small/tens_hold_steps/tens_hold_xyz_st08_a.png )
+![Step 08](imgs/small/tens_hold_steps/tens_hold_yz_st08_a.png )
 
+## Step 09: Chamfer the unions
+
+```cpp
       /* --------------- step 09 --------------------------- 
          Chamfer the unions
                                    Z   Z
@@ -320,8 +353,15 @@ module idler_holder()
         fillet_add_y (r=chmf_rad, h=hold_bas_l, xdir=-1, zdir=1, fillet=0);
       translate ([hold_bas_w - aluprof_w, 0, hold_bas_h])
         fillet_add_y (r=chmf_rad, h=hold_bas_l, xdir=1, zdir=1,fillet=0);
-  
     }
+```
+![Step 09](imgs/small/tens_hold_steps/tens_hold_xyz_st09_a.png )
+![Step 09](imgs/small/tens_hold_steps/tens_hold_yz_st09_a.png )
+
+
+## Step 10: Bolt holes to attach the piece to the aluminum profile 
+
+```cpp
       /* --------------- step 10 --------------------------- 
          Bolt holes to attach the piece to the aluminum profile
                                    Z   Z
@@ -355,12 +395,18 @@ module idler_holder()
                      h_layer3d = 0, mnfold = 1);
   }
 }
+```
 
+![Step 10](imgs/small/tens_hold_steps/tens_hold_xyz_st10_a.png )
+![Step 10](imgs/small/tens_hold_steps/tens_hold_xy_st10.png )
 
-
-
+## Step 11: Rotate to print without support
+```cpp
 // Rotation and translation to print, axis are moved
 translate ([0, hold_l,0])
   rotate ([90,0,0])
-    idler_holder();
+    tensioner_holder();
+```
+
+![Step 11](imgs/small/tens_hold_steps/tens_hold_xyz_st11_a_print.png)
 

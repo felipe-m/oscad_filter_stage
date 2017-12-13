@@ -4,7 +4,7 @@
 
 Check the source file [idler_tensioner.scad](src/idler_tensioner.scad)
 
-You may want to check the steps for the [idler holder](./idler_holder.md) 
+You may want to check the steps for the [tensioner holder](./tensioner_holder.md) 
 
 Back to the [readme.md](./readme.md)
 
@@ -18,7 +18,7 @@ include <oscad_utils/bolt_sizes.scad> // include to use the constants
 use <oscad_utils/fillet.scad>
 use <oscad_utils/bolts.scad>  
 // where the constants are defined
-include <idler_cte.scad>
+include <kidler.scad>
 
 module idler_tens ()
 {
@@ -349,7 +349,7 @@ not want to have them
     // Hole to insert the leadscrew nut
     // tens_h/2-1 to haver more tolerance
     translate ([tens_w/2-1, nut_holder_thick, tens_h/2-m4_nut_ap_tol])
-      cube([tens_w/2 + 2,, nut_space, 2*m4_nut_ap_tol]);
+      cube([tens_w/2 + 2, nut_space, 2*m4_nut_ap_tol]);
   }// end of difference
 } // end of module
 

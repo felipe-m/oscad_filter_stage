@@ -299,16 +299,15 @@ module idler_tens ()
     // Hole for the leadscrew nut
     // tens_w/2-1 to have more tolerance, so it is a little bit deeper
     translate ([tens_w/2-1, nut_holder_thick, tens_h/2])
-      //rotate ([0,90,0])
-        rotate([-90,0,0]) //-90 to go to the positive side of Y
-          // +stol to make it bigger. This is a hexagon for the nut,
-          // not a cylinder: fn=6
-          cylinder (r=m4_nut_r_tol+stol, h = nut_space, $fn=6);
+      rotate([-90,0,0]) //-90 to go to the positive side of Y
+        // +stol to make it bigger. This is a hexagon for the nut,
+        // not a cylinder: fn=6
+        cylinder (r=m4_nut_r_tol+stol, h = nut_space, $fn=6);
    
     // Hole to insert the leadscrew nut
     // tens_h/2-1 to haver more tolerance
     translate ([tens_w/2-1, nut_holder_thick, tens_h/2-m4_nut_ap_tol])
-      cube([tens_w/2 + 2,, nut_space, 2*m4_nut_ap_tol]);
+      cube([tens_w/2 + 2, nut_space, 2*m4_nut_ap_tol]);
   }
 }
 
