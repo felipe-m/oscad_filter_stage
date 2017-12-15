@@ -6,6 +6,8 @@ Check the source file [tensioner_holder.scad](src/tensioner_holder.scad)
 
 You may want to check the steps for the [idler tensioner](./idler_tensioner.md) 
 
+This tutorial can be compared with the [FreeCAD tutorial](https://github.com/felipe-m/freecad_filter_stage) for this [Tensioner Holder](https://github.com/felipe-m/freecad_filter_stage/blob/master/tensioner_holder.md) 
+
 Back to the [readme.md](./readme.md)
 
 # Steps
@@ -26,7 +28,6 @@ module tensioner_holder()
 
 
 ## Step 01: Create the base
-Everything else will cut the box:
 
 ```cpp
   difference () {

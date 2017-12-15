@@ -6,6 +6,9 @@ Check the source file [idler_tensioner.scad](src/idler_tensioner.scad)
 
 You may want to check the steps for the [tensioner holder](./tensioner_holder.md) 
 
+This tutorial can be compared with the [FreeCAD tutorial](https://github.com/felipe-m/freecad_filter_stage) for this [Idler Tensioner](https://github.com/felipe-m/freecad_filter_stage/blob/master/idler_tensioner.md) 
+
+
 Back to the [readme.md](./readme.md)
 
 # Steps

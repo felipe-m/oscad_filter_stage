@@ -1,4 +1,4 @@
-/* Idler holder
+/* Tensioner holder
   ----------------------------------------------------------------------------
   -- (c) Felipe Machado
   -- Area of Electronic Technology. Rey Juan Carlos University (urjc.es)
@@ -70,7 +70,7 @@ use <oscad_utils/bolts.scad>
 // where the constants are defined
 include <kidler.scad>
 
-module idler_holder()
+module tensioner_holder()
 {
   difference () {
     union () 
@@ -362,5 +362,5 @@ module idler_holder()
 // Rotation and translation to print, axis are moved
 translate ([0, hold_l,0])
   rotate ([90,0,0])
-    idler_holder();
+    tensioner_holder();
 
