@@ -74,7 +74,7 @@ in_fillet = 2;
 aluprof_w = 30;
 
 // bolt size to attach the piece to the aluminum profile
-aluprof_bolt_d = 4;
+boltaluprof_d = 4;
 
 /* height of the holder base
 
@@ -98,11 +98,11 @@ opt_tens_chmf = 1;
 // - step 07 in idler_holder.scad:
 hold_hole_2sides = 1;
 
-// The position where the GT2 starts, from the lower profile
+// The position where the belt starts, from the lower profile
 // Considering that the filter holder and guide are in a higher
 // aluminum profile than the filter_idler. See picture below
 
-gt2_pos_h = aluprof_w + 3.5;
+belt_pos_h = aluprof_w + 3.5;
 
 
 
@@ -151,58 +151,58 @@ bolttens_r_tol = m4_r_tol;
 
 
 // cannot do it with if due to the variable scope
-aluprof_bolt_head_r_tol = (aluprof_bolt_d == 6) ?
+boltaluprof_head_r_tol = (boltaluprof_d == 6) ?
                             m6_head_r_tol :
-                          ((aluprof_bolt_d == 5) ?
+                          ((boltaluprof_d == 5) ?
                             m5_head_r_tol :
-                          ((aluprof_bolt_d == 4) ?
+                          ((boltaluprof_d == 4) ?
                             m4_head_r_tol : m3_head_r_tol ));
 
 // cannot do it with if due to the variable scope
-aluprof_bolt_r_tol = (aluprof_bolt_d == 6) ?
+boltaluprof_r_tol = (boltaluprof_d == 6) ?
                             m6_r_tol :
-                          ((aluprof_bolt_d == 5) ?
+                          ((boltaluprof_d == 5) ?
                             m5_r_tol :
-                          ((aluprof_bolt_d == 4) ?
+                          ((boltaluprof_d == 4) ?
                             m4_r_tol : m3_r_tol ));
 
 // cannot do it with if due to the variable scope
-aluprof_bolt_head_l = (aluprof_bolt_d == 6) ?
+boltaluprof_head_l = (boltaluprof_d == 6) ?
                             m6_head_l :
-                          ((aluprof_bolt_d == 5) ?
+                          ((boltaluprof_d == 5) ?
                             m5_head_l :
-                          ((aluprof_bolt_d == 4) ?
+                          ((boltaluprof_d == 4) ?
                             m4_head_l : m3_head_l ));
 
 /* this is useless in openscad because of the variable scope
    the variables are not updated after the conditions
    so we use the conditional above: ?
-if (aluprof_bolt_d == 6) {
-  aluprof_bolt_head_r_tol = m6_head_r_tol;
-  aluprof_bolt_r_tol = m6_r_tol;
-  aluprof_bolt_head_l = m6_head_l;
+if (boltaluprof_d == 6) {
+  boltaluprof_head_r_tol = m6_head_r_tol;
+  boltaluprof_r_tol = m6_r_tol;
+  boltaluprof_head_l = m6_head_l;
 } else {
-  if (aluprof_bolt_d == 5) {
-    aluprof_bolt_head_r_tol = m5_head_r_tol;
-    aluprof_bolt_r_tol = m5_r_tol;
-    aluprof_bolt_head_l = m5_head_l;
-    echo(aluprof_bolt_r_tol);
+  if (boltaluprof_d == 5) {
+    boltaluprof_head_r_tol = m5_head_r_tol;
+    boltaluprof_r_tol = m5_r_tol;
+    boltaluprof_head_l = m5_head_l;
+    echo(boltaluprof_r_tol);
   } else {
-    if (aluprof_bolt_d == 4) {
-      aluprof_bolt_head_r_tol = m4_head_r_tol;
-      aluprof_bolt_r_tol = m4_r_tol;
-      aluprof_bolt_head_l = m4_head_l;
+    if (boltaluprof_d == 4) {
+      boltaluprof_head_r_tol = m4_head_r_tol;
+      boltaluprof_r_tol = m4_r_tol;
+      boltaluprof_head_l = m4_head_l;
     } else {
-      aluprof_bolt_head_r_tol = m3_head_r_tol;
-      aluprof_bolt_r_tol = m3_r_tol;
-      aluprof_bolt_head_l = m3_head_l;
+      boltaluprof_head_r_tol = m3_head_r_tol;
+      boltaluprof_r_tol = m3_r_tol;
+      boltaluprof_head_l = m3_head_l;
     }
   }
 }
 */
 
 
-/* Vertical position of the gt2 pulley and the tensioner
+/* Vertical position of the belt pulley and the tensioner
                                Z   Z
   idler holder:                :   :
                 _______        :   :____________
@@ -221,7 +221,7 @@ if (aluprof_bolt_d == 6) {
         |  --  |______| |_======_  = largewasher_thick  :
          \__________________::___|.: wall_thick         :
                                      :                  :
-                                     :                  + gt2_pos_h
+                                     :                  + belt_pos_h
                                      :                  :
                                      +tens_pos_h        :
                                      :                  :
@@ -230,7 +230,7 @@ if (aluprof_bolt_d == 6) {
                             alu_prof
 */
 
-tens_pos_h = gt2_pos_h - wall_thick -largewasher_thick; 
+tens_pos_h = belt_pos_h - wall_thick -largewasher_thick; 
 
 // The part of the tensioner that will be inside
 tens_l_inside = tens_l - 2 * idler_r_xtr;

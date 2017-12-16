@@ -336,22 +336,22 @@ module tensioner_holder()
       */
     translate ([aluprof_w/2,
                 aluprof_w/2,
-                hold_bas_h + aluprof_bolt_head_l])
+                hold_bas_h + boltaluprof_head_l])
         rotate ([180,0,0])
-          bolt_hole (r_shank = aluprof_bolt_r_tol,
-                     l_bolt = hold_bas_h + aluprof_bolt_head_l,
-                     r_head = aluprof_bolt_head_r_tol,
-                     l_head = aluprof_bolt_head_l, hex_head = 0, 
+          bolt_hole (r_shank = boltaluprof_r_tol,
+                     l_bolt = hold_bas_h + boltaluprof_head_l,
+                     r_head = boltaluprof_head_r_tol,
+                     l_head = boltaluprof_head_l, hex_head = 0, 
                      h_layer3d = 0, mnfold = 1);
 
     translate ([hold_bas_w - aluprof_w/2,
                 aluprof_w/2,
-                hold_bas_h + aluprof_bolt_head_l])
+                hold_bas_h + boltaluprof_head_l])
         rotate ([180,0,0])
-          bolt_hole (r_shank = aluprof_bolt_r_tol,
-                     l_bolt = hold_bas_h + aluprof_bolt_head_l,
-                     r_head = aluprof_bolt_head_r_tol,
-                     l_head = aluprof_bolt_head_l, hex_head = 0, 
+          bolt_hole (r_shank = boltaluprof_r_tol,
+                     l_bolt = hold_bas_h + boltaluprof_head_l,
+                     r_head = boltaluprof_head_r_tol,
+                     l_head = boltaluprof_head_l, hex_head = 0, 
                      h_layer3d = 0, mnfold = 1);
   }
 }
