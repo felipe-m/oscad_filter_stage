@@ -151,23 +151,26 @@ translate ([base_filtro_x,  -base_filtro_y/2, 0])
 
   
 // ------------------------------ SOPORTE VERTICAL QUE UNE CON LA GUIA ----------------
-// soporte que va a la guia
+// holder, just the part that holds, not the filter support
 
-sop_guia_x = 12;
+hold_d = 12;
 sop_guia_y = base_filtro_y;
-sop_guia_z = 45;
+hold_h = 45;
 
 despl_sop_guia_x = 8; // que se desplaza hacia atras, el resto se solapa con la base_filtro
 
+boltrow1_2_dist = 12.5;
 // bolt separation along axis perpendicular to rail in linear guide MGN12H
 boltrow1_3_dist = 20; 
 // bolt separation along axis perpendicular to rail in linear guides:
 // SEBLV16 y SEBS15MGN12H
-boltrow1_4_dist = 25; // Distancia vertical de las guias SEBLV16 y SEBS15
+boltrow1_4_dist = 25;
 
 // Bolt separation along the rail of SEBLV16, SEBS15, MGN12H linear guides
 linguide_boltsep_d = 20;
 boltcol1_dist = linguide_boltsep_d / 2;
+boltcol2_dist = 12.5; // bolt distance of Thorlabs breadboard
+boltcol3_dist = 25;   // 2xbolt distance of Thorlabs breadboard
 
 
 // medidas taladros
@@ -191,10 +194,10 @@ module tornillo (radio, radio_cabeza)
 {
   union () {
     translate([-hole_x,0,low_hole_z])rotate([0,90,0])
-      cylinder(r=radio, h=sop_guia_x, $fa=1, $fs=0.5);
+      cylinder(r=radio, h=hold_d, $fa=1, $fs=0.5);
 
     translate([0,0,low_hole_z])rotate([0,90,0])
-      cylinder(r=radio_cabeza,h= sop_guia_x-despl_sop_guia_x+1,$fa=1, $fs=0.5);
+      cylinder(r=radio_cabeza,h= hold_d-despl_sop_guia_x+1,$fa=1, $fs=0.5);
 }
 }
 
@@ -203,13 +206,13 @@ module tornillo (radio, radio_cabeza)
 module cabeza_tornillo (radio_cabeza)
 {
     translate([0,0,low_hole_z])rotate([0,90,0])
-      cylinder(r=radio_cabeza,h= sop_guia_x-despl_sop_guia_x+1,$fa=1, $fs=0.5);
+      cylinder(r=radio_cabeza,h= hold_d-despl_sop_guia_x+1,$fa=1, $fs=0.5);
 }
 
 module vastago_tornillo (radio)
 {
     translate([-hole_x,0,low_hole_z])rotate([0,90,0])
-      cylinder(r=radio, h=sop_guia_x, $fa=1, $fs=0.5);    
+      cylinder(r=radio, h=hold_d, $fa=1, $fs=0.5);    
 }
 
 
@@ -220,11 +223,11 @@ grosor_atrapa_gt2 = 3;
 // Dimensiones del bloque que atrapa la correa: bl
 largo_bl_atrapa_gt2 = 14;
 alto_bl_atrapa_gt2 = 8; // el ancho (que es alto) de la correa es 6mm
-x_bl_atrapa_gt2 = (sop_guia_x-grosor_atrapa_gt2)/2;
+x_bl_atrapa_gt2 = (hold_d-grosor_atrapa_gt2)/2;
 
-//pos_z_atrapa_gt2 = low_hole_z + top_hole_thorlabs_z;
-//pos_z_atrapa_gt2 = sop_guia_z - alto_bl_atrapa_gt2;
-pos_z_atrapa_gt2 = sop_guia_z;
+//pos_z_atrapa_gt2 = low_hole_z + boltrow1_2_dist;
+//pos_z_atrapa_gt2 = hold_h - alto_bl_atrapa_gt2;
+pos_z_atrapa_gt2 = hold_h;
 
 // referenciado a la esquina izquierda trasera
 module atrapa_gt2 () 
@@ -232,7 +235,7 @@ module atrapa_gt2 ()
     translate ([-despl_sop_guia_x,-sop_guia_y/2,pos_z_atrapa_gt2]) cube([x_bl_atrapa_gt2, largo_bl_atrapa_gt2, alto_bl_atrapa_gt2]);
 }
 
-// ---------------------- Bloques que atrapan la correa ----------------------
+// ---------------------- blocks to catch the belt -------------------
 
 // El hueco para poner estos bloques
 // Este hueco por ahora no se usa
@@ -240,7 +243,7 @@ y_hueco_atrapa_gt2 = sop_guia_y/2 - boltcol1_dist - cabeza_m3_r - 5;
 y_hueco_atrapa_gt2_mn = y_hueco_atrapa_gt2 + 1; // +1 para evitar non+manifold
 
 // Dejar 1.5 a cada lado, ya que la correa es de 1.38 de grosor
-radio_atrapa_gt2_gr = (sop_guia_x - 3) / 2;
+radio_atrapa_gt2_gr = (hold_d - 3) / 2;
 // el del cilindro pequeno
 radio_atrapa_gt2_pq = 1;
 
@@ -270,37 +273,35 @@ module rodea_gt2 ()
 difference () {
   union () {
     translate([-despl_sop_guia_x, -sop_guia_y/2,0])
-      cube([sop_guia_x, sop_guia_y, sop_guia_z]);
-    translate ([-despl_sop_guia_x+sop_guia_x/2,0,0]) rodea_gt2 ();
-    translate ([-despl_sop_guia_x+sop_guia_x/2,0,0]) rotate ([0,0,180]) rodea_gt2();
+      cube([hold_d, sop_guia_y, hold_h]);
+    translate ([-despl_sop_guia_x+hold_d/2,0,0]) rodea_gt2 ();
+    translate ([-despl_sop_guia_x+hold_d/2,0,0]) rotate ([0,0,180]) rodea_gt2();
       // Los bloques paralaleos que atrapan la correa
     atrapa_gt2();
-    translate ([sop_guia_x-x_bl_atrapa_gt2,0,0]) atrapa_gt2();
+    translate ([hold_d-x_bl_atrapa_gt2,0,0]) atrapa_gt2();
     translate ([0,sop_guia_y-largo_bl_atrapa_gt2,0]) atrapa_gt2();
-    translate ([sop_guia_x-x_bl_atrapa_gt2,sop_guia_y-largo_bl_atrapa_gt2,0]) atrapa_gt2();
+    translate ([hold_d-x_bl_atrapa_gt2,sop_guia_y-largo_bl_atrapa_gt2,0]) atrapa_gt2();
   }
 
 // Cubo que hace el hueco para que vayan las atrapa guias
-//translate ([-despl_sop_guia_x-1,-sop_guia_y/2-1,pos_z_atrapa_gt2]) cube([sop_guia_x+2, y_hueco_atrapa_gt2_mn, alto_bl_atrapa_gt2+1]);
-//translate ([-despl_sop_guia_x-1,sop_guia_y/2-y_hueco_atrapa_gt2_mn+1,pos_z_atrapa_gt2]) cube([sop_guia_x+2, y_hueco_atrapa_gt2_mn, alto_bl_atrapa_gt2+1]);
+//translate ([-despl_sop_guia_x-1,-sop_guia_y/2-1,pos_z_atrapa_gt2]) cube([hold_d+2, y_hueco_atrapa_gt2_mn, alto_bl_atrapa_gt2+1]);
+//translate ([-despl_sop_guia_x-1,sop_guia_y/2-y_hueco_atrapa_gt2_mn+1,pos_z_atrapa_gt2]) cube([hold_d+2, y_hueco_atrapa_gt2_mn, alto_bl_atrapa_gt2+1]);
     
-// La siguiente linea de huecos de la posicionadora Thorlabs esta 12.5
-top_hole_thorlabs_z = 12.5;
 tornillo (m4_r, cabeza_m4_r);
 // Taladros de Thorlabs
-translate([0,25,0]) tornillo(m4_r, cabeza_m4_r);
-translate([0,-25,0]) tornillo(m4_r, cabeza_m4_r);
-translate([0,12.5,top_hole_thorlabs_z]) tornillo(m4_r, cabeza_m4_r);
-translate([0,-12.5,top_hole_thorlabs_z]) tornillo(m4_r, cabeza_m4_r);
+translate([0,boltcol3_dist,0]) tornillo(m4_r, cabeza_m4_r);
+translate([0,-boltcol3_dist,0]) tornillo(m4_r, cabeza_m4_r);
+translate([0,boltcol2_dist,boltrow1_2_dist]) tornillo(m4_r, cabeza_m4_r);
+translate([0,-boltcol2_dist,boltrow1_2_dist]) tornillo(m4_r, cabeza_m4_r);
 
 // Taladros de NB SEBS15A y SEBLV16 (Misumi)
-translate([0,10,0]) tornillo(m3_r, cabeza_m3_r);
-translate([0,-10,0]) tornillo(m3_r, cabeza_m3_r);
+translate([0,boltcol1_dist,0]) tornillo(m3_r, cabeza_m3_r);
+translate([0,-boltcol1_dist,0]) tornillo(m3_r, cabeza_m3_r);
 // Estos estan unidos, asi que hago las cabezas y los vastagos separados
-//translate([0,10,25]) tornillo(m3_r, cabeza_m3_r);
-//translate([0,-10,25]) tornillo(m3_r, cabeza_m3_r);
-//translate([0,10,boltrow1_3_dist]) tornillo(m3_r, cabeza_m3_r);
-//translate([0,-10,boltrow1_3_dist]) tornillo(m3_r, cabeza_m3_r);
+//translate([0,boltcol1_dist,25]) tornillo(m3_r, cabeza_m3_r);
+//translate([0,-boltcol1_dist,25]) tornillo(m3_r, cabeza_m3_r);
+//translate([0,boltcol1_dist,boltrow1_3_dist]) tornillo(m3_r, cabeza_m3_r);
+//translate([0,-boltcol1_dist,boltrow1_3_dist]) tornillo(m3_r, cabeza_m3_r);
 
 // Cabezas y vastagos separados:
 translate([0,boltcol1_dist,boltrow1_4_dist]) vastago_tornillo(m3_r);
@@ -326,5 +327,5 @@ translate([-despl_sop_guia_x, -sop_guia_y/2,0]) redondeo_mxmy(r_fillet=2, h_fill
 
 
 
-translate ([sop_guia_x-despl_sop_guia_x,-base_filtro_y/2,base_h]) chaflan_hal (diagonal = 2, largo= base_filtro_y);
+translate ([hold_d-despl_sop_guia_x,-base_filtro_y/2,base_h]) chaflan_hal (diagonal = 2, largo= base_filtro_y);
 
