@@ -1,44 +1,117 @@
+/* Filter Holder
+   To be pulled by a belt and holes to attach it to a linear guide
+  ----------------------------------------------------------------------------
+  -- (c) Felipe Machado
+  -- Area of Electronic Technology. Rey Juan Carlos University (urjc.es)
+  -- https://github.com/felipe-m
+  -- 2017
+  ----------------------------------------------------------------------------
+  --- LGPL Licence
+  ----------------------------------------------------------------------------
+
+                         Z
+                         :
+                         :
+          ___    ___     :     ___    ___       ____
+         |   |  |   |    :    |   |  |   |     | || |
+         |...|__|___|____:____|___|__|...|     |_||_|
+         |         _           _         |     |  ..|
+         |        |o|         |o|        |     |::  |
+         |        |o|         |o|        |     |::  |
+         |                               |     |  ..|
+         |                               |     |  ..|
+         |      (O)             (O)      |     |::  |
+         |                               |     |  ..|
+         |                               |     |  ..|
+         |  (O)   (o)   (O)   (o)   (O)  |     |::  |
+         |_______________________________|     |  ..|
+         |_______________________________|     |     \_________________
+         |  :.........................:  |     |       :............:  |
+         |   :                       :   |     |        :          :   |
+         |___:_______________________:___|     |________:__________:___|..>X
+
+
+
+          _______________________________ ......> Y (width)
+         |____|                     |____|
+         |____   <  )          (  >  ____|
+         |____|_____________________|____|
+         |_______________________________|
+         |  ___________________________  |..................
+         | | ......................... | |...filt_supp_in  :
+         | | :                       : | |                 :
+         | | :                       : | |                 + filt_hole_d
+         | | :                       : | |                 :
+         | | :.......................: | |                 :
+         | |___________________________| |.................:
+          \_____________________________/
+         : : :                       : : :
+         : : :                       : : :
+         : : :                       :+: :
+         : : :            filt_supp_in : :
+         : : :                       : : :
+         : : :... filt_sup_len ......: : :
+         : :                           : :
+         : :                           : :
+         : :....... filt_hole_w .......: :
+         :                               :
+         :....... filt_base_width .......:
+                        :
+                        :
+                        :
+                        X (depth)
+
+
+*/
+
+
 use  <oscad_utils/chamfer.scad>
 
 // La base donde va el filtro.
 // Dimensiones exteriores
 base_filtro_x = 39.5;
 base_filtro_y = 80;
-base_filtro_z = 8;
+base_h = 8;
 
-// Tamano del filtro lf102249
+// Dimensions of the filter, taking this filter dimensions: lf102249
 // http://www.deltaopticalthinfilm.com/product/lv-vis-bandpass-filter-b/
 
-filtro_x = 25;
-filtro_y = 60;
-filtro_z = 2.5;
-tol_filtro = 0.4;
+filter_l = 60;
+filter_w = 25;
+filter_t = 2.5;
+filter_tol = 0.4;
 
-// incluyendo tolerancias, para que el filtro quepa bien
-filtrotol_x = 25 + tol_filtro;
-filtrotol_y = 60 + tol_filtro;
-filtrotol_z = 2.5 + tol_filtro/2; //mitad de tolerancia eje Z
+// Filter hole with tolerances, to make it fit
+// Note that now the dimensions width and length are changed.
+// to depth and width
+// they are relative to the holder width and depth, not to the filter length
+// and width
+filt_hole_w = filter_l + filter_tol;
+filt_hole_d = filter_w + filter_tol;
+filt_hole_h = filter_t + filter_tol/2; //0.5 the tolerance for height
 
-// el hueco debajo del filtro (para que pase la luz)
-// y que sea suficiente para sostener el filtro
-dismin_soporte_filtro = 4; 
-soporte_filtro_x = filtro_x - dismin_soporte_filtro;
-soporte_filtro_y = filtro_y - dismin_soporte_filtro;
-bisel = 1;  //radio del bisel
+// The hole under the filter to let the light go through
+// and big enough to hold the filter
+filt_supp_in = 2; 
+// we could take filter_hole dimensions or filter dimensiones (tol difference)
+filt_supp_d = filt_hole_d - 2 * filt_supp_in;
+filt_supp_w = filt_hole_w - 2 * filt_supp_in;
 
-// -------------------------- BASE DEL FILTRO ---------------------------------------
+fillet_r = 1;  //radius of the fillet
+
+// -------------------- Filter base  ---------------------------------------
 // Esta diferencia es la base del filtro
 
 difference () {
 
 // La base del filtro, centrada en el eje X
-translate([0,-base_filtro_y/2,0]) cube([base_filtro_x, base_filtro_y, base_filtro_z]);
+translate([0,-base_filtro_y/2,0]) cube([base_filtro_x, base_filtro_y, base_h]);
 
 // El hueco del filtro
-translate ([(base_filtro_x-filtrotol_x)/2,
-            -filtrotol_y/2,
-            base_filtro_z - filtrotol_z/2])
-   cube([filtrotol_x, filtrotol_y, filtrotol_z+1]);
+translate ([(base_filtro_x-filt_hole_d)/2,
+            -filt_hole_w/2,
+            base_h - filt_hole_h/2])
+   cube([filt_hole_d, filt_hole_w, filt_hole_h+1]);
    //el +1 del eje Z es para evitar non-manifold
 
 // El hueco del filtro, que sujeta al filtro y que deja pasar la luz
@@ -46,21 +119,21 @@ union () {
 for (x=[-1,1])
     for (y=[-1,1])
         translate([
-          base_filtro_x/2 + x * (soporte_filtro_x/2-bisel),
-          y * (soporte_filtro_y/2 - bisel),
+          base_filtro_x/2 + x * (filt_supp_d/2-fillet_r),
+          y * (filt_supp_w/2 - fillet_r),
           -1])
-         cylinder (r=bisel, h=base_filtro_z+2,$fa=1, $fs=0.5);
+         cylinder (r=fillet_r, h=base_h+2,$fa=1, $fs=0.5);
     
   //Largo en X, y corto en Y
-  translate([(base_filtro_x-soporte_filtro_x)/2,
-            -(soporte_filtro_y/2-bisel),
+  translate([(base_filtro_x-filt_supp_d)/2,
+            -(filt_supp_w/2-fillet_r),
             -1]) 
-    cube ([soporte_filtro_x,soporte_filtro_y-2*bisel, base_filtro_z +2]);
+    cube ([filt_supp_d,filt_supp_w-2*fillet_r, base_h +2]);
     
- translate([(base_filtro_x-soporte_filtro_x)/2+bisel,
-            -(soporte_filtro_y/2),
+ translate([(base_filtro_x-filt_supp_d)/2+fillet_r,
+            -(filt_supp_w/2),
             -1]) 
-    cube ([soporte_filtro_x-2*bisel,soporte_filtro_y, base_filtro_z +2]);
+    cube ([filt_supp_d-2*fillet_r,filt_supp_w, base_h +2]);
     
  
 }
@@ -69,10 +142,10 @@ for (x=[-1,1])
 
 r_fillet = 5;
 translate ([base_filtro_x,  base_filtro_y/2, 0]) 
-  redondeo_xy (r_fillet=r_fillet, h_fillet=base_filtro_z);
+  redondeo_xy (r_fillet=r_fillet, h_fillet=base_h);
 
 translate ([base_filtro_x,  -base_filtro_y/2, 0]) 
-  redondeo_xmy (r_fillet=r_fillet, h_fillet=base_filtro_z);
+  redondeo_xmy (r_fillet=r_fillet, h_fillet=base_h);
 
 }
 
@@ -86,10 +159,15 @@ sop_guia_z = 45;
 
 despl_sop_guia_x = 8; // que se desplaza hacia atras, el resto se solapa con la base_filtro
 
+// bolt separation along axis perpendicular to rail in linear guide MGN12H
+boltrow1_3_dist = 20; 
+// bolt separation along axis perpendicular to rail in linear guides:
+// SEBLV16 y SEBS15MGN12H
+boltrow1_4_dist = 25; // Distancia vertical de las guias SEBLV16 y SEBS15
 
-top_hole_mgn12h = 20; // Distancia vertical de la guia MGN12H
-top_hole_seb = 25; // Distancia vertical de las guias SEBLV16 y SEBS15
-y_dist_seb = 20; // Distancia y (a lo largo del carril) de las guias SEBLV16 y SEBS15, y MGN12H
+// Bolt separation along the rail of SEBLV16, SEBS15, MGN12H linear guides
+linguide_boltsep_d = 20;
+boltcol1_dist = linguide_boltsep_d / 2;
 
 
 // medidas taladros
@@ -158,7 +236,7 @@ module atrapa_gt2 ()
 
 // El hueco para poner estos bloques
 // Este hueco por ahora no se usa
-y_hueco_atrapa_gt2 = sop_guia_y/2 - y_dist_seb/2 - cabeza_m3_r - 5; 
+y_hueco_atrapa_gt2 = sop_guia_y/2 - boltcol1_dist - cabeza_m3_r - 5; 
 y_hueco_atrapa_gt2_mn = y_hueco_atrapa_gt2 + 1; // +1 para evitar non+manifold
 
 // Dejar 1.5 a cada lado, ya que la correa es de 1.38 de grosor
@@ -221,21 +299,21 @@ translate([0,-10,0]) tornillo(m3_r, cabeza_m3_r);
 // Estos estan unidos, asi que hago las cabezas y los vastagos separados
 //translate([0,10,25]) tornillo(m3_r, cabeza_m3_r);
 //translate([0,-10,25]) tornillo(m3_r, cabeza_m3_r);
-//translate([0,10,top_hole_mgn12h]) tornillo(m3_r, cabeza_m3_r);
-//translate([0,-10,top_hole_mgn12h]) tornillo(m3_r, cabeza_m3_r);
+//translate([0,10,boltrow1_3_dist]) tornillo(m3_r, cabeza_m3_r);
+//translate([0,-10,boltrow1_3_dist]) tornillo(m3_r, cabeza_m3_r);
 
 // Cabezas y vastagos separados:
-translate([0,y_dist_seb/2,top_hole_seb]) vastago_tornillo(m3_r);
-translate([0,-y_dist_seb/2,top_hole_seb]) vastago_tornillo(m3_r);
-translate([0,y_dist_seb/2,top_hole_mgn12h]) vastago_tornillo(m3_r);
-translate([0,-y_dist_seb/2,top_hole_mgn12h]) vastago_tornillo(m3_r);
+translate([0,boltcol1_dist,boltrow1_4_dist]) vastago_tornillo(m3_r);
+translate([0,-boltcol1_dist,boltrow1_4_dist]) vastago_tornillo(m3_r);
+translate([0,boltcol1_dist,boltrow1_3_dist]) vastago_tornillo(m3_r);
+translate([0,-boltcol1_dist,boltrow1_3_dist]) vastago_tornillo(m3_r);
 hull () {
-  translate([0,y_dist_seb/2,top_hole_seb]) cabeza_tornillo(cabeza_m3_r);
-  translate([0,y_dist_seb/2,top_hole_mgn12h]) cabeza_tornillo(cabeza_m3_r);
+  translate([0,boltcol1_dist,boltrow1_4_dist]) cabeza_tornillo(cabeza_m3_r);
+  translate([0,boltcol1_dist,boltrow1_3_dist]) cabeza_tornillo(cabeza_m3_r);
 }
 hull () {
-  translate([0,-y_dist_seb/2,top_hole_seb]) cabeza_tornillo(cabeza_m3_r);
-  translate([0,-y_dist_seb/2,top_hole_mgn12h]) cabeza_tornillo(cabeza_m3_r);
+  translate([0,-boltcol1_dist,boltrow1_4_dist]) cabeza_tornillo(cabeza_m3_r);
+  translate([0,-boltcol1_dist,boltrow1_3_dist]) cabeza_tornillo(cabeza_m3_r);
    
 }
 
@@ -248,5 +326,5 @@ translate([-despl_sop_guia_x, -sop_guia_y/2,0]) redondeo_mxmy(r_fillet=2, h_fill
 
 
 
-translate ([sop_guia_x-despl_sop_guia_x,-base_filtro_y/2,base_filtro_z]) chaflan_hal (diagonal = 2, largo= base_filtro_y);
+translate ([sop_guia_x-despl_sop_guia_x,-base_filtro_y/2,base_h]) chaflan_hal (diagonal = 2, largo= base_filtro_y);
 
