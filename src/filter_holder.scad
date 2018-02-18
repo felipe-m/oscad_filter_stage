@@ -45,22 +45,100 @@
          | | :.......................: | |                 :
          | |___________________________| |.................:
           \_____________________________/
-         : : :                       : : :
-         : : :                       : : :
-         : : :                       :+: :
-         : : :            filt_supp_in : :
-         : : :                       : : :
-         : : :... filt_sup_len ......: : :
-         : :                           : :
-         : :                           : :
-         : :....... filt_hole_w .......: :
-         :                               :
-         :....... filt_base_width .......:
                         :
                         :
                         :
                         X (depth)
 
+
+
+                       axis_h
+                         :
+                         :
+          ___    ___     :     ___    ___ 
+         |   |  |   |    :    |   |  |   |
+         |...|__|___|____:____|___|__|...|...
+         |         _           _         |   2 * bolt_linguide_head_r_tol
+         |        |o|         |o|        |-----------------------
+         |        |o|         |o|        |--------------------  +boltrow1_4_dist
+         |                               |                   :  :
+         |                               |                   +boltrow1_3_dist
+         |      (O)             (O)      |--:                :  :
+         |                               |  +boltrow1_2_dist :  :
+         |                               |  :                :  :
+         | (O)    (o)   (O)   (o)    (O) |--:----------------:--:
+         |_______________________________|  + boltrow1_h
+         |_______________________________|..:..................
+         |  :.........................:  |..: filt_hole_h  :
+         |   :                       :   |                 + base_h
+         |___:___________x___________:___|.................:........axis_w
+                         :     : :    :
+                         :.....: :    :
+                         : + boltcol1_dist
+                         :       :    :
+                         :.......:    :
+                         : + boltcol2_dist
+                         :            :
+                         :............:
+                            boltcol3_dist
+
+
+
+
+                                     belt_clamp_l
+                                    ..+...
+                                    :    :
+          _______________x__________:____:...................> axis_w
+         |____|                     |____|..                :
+         |____   <  )          (  >  ____|..: belt_clamp_t  :+ hold_d
+         |____|_____________________|____|..................:
+         |_______________________________|
+         |  ___________________________  |.................
+         | | ......................... | |..filt_supp_in   :
+         | | :                       : | |  :              :
+         | | :                       : | |  :              :+filt_hole_d
+         | | :                       : | |  + filt_supp_d  :
+         | | :.......................: | |..:              :
+         | |___________________________| |.................:
+          \_____________________________/.....filt_rim
+         : : :                       : : :
+         : : :                       : : :
+         : : :                       :+: :
+         : : :            filt_supp_in : :
+         : : :                       : : :
+         : : :.... filt_supp_w ......: : :
+         : :                           : :
+         : :                           : :
+         : :...... filt_hole_w   ......: :
+         :                             :+:
+         :                      filt_rim :
+         :                               :
+         :....... tot_w .................:
+
+
+
+
+                ____...............................
+               | || |   + belt_clamp_h            :
+               |_||_|...:................         :
+               |  ..|                   :         :
+               |::  |                   :         :
+               |::  |                   :         :
+               |  ..|                   :         :
+               |  ..|                   :         :+ tot_h
+               |::  |                   :         :
+               |  ..|                   :+hold_h  :
+               |  ..|                   :         :
+               |::  |                   :         :
+               |  ..|                   :         :
+               |     \________________  :         :
+               |       :...........:  | :         :
+               |        :         :   | :         :
+               x________:_________:___|.:.........:...>axis_d
+               :                      :
+               :                      :
+               :...... tot_d .........:
+ 
 
 */
 
@@ -114,7 +192,7 @@ translate ([(base_filtro_x-filt_hole_d)/2,
    cube([filt_hole_d, filt_hole_w, filt_hole_h+1]);
    //el +1 del eje Z es para evitar non-manifold
 
-// El hueco del filtro, que sujeta al filtro y que deja pasar la luz
+// the hole under the filter to let the light go through
 union () {
 for (x=[-1,1])
     for (y=[-1,1])
@@ -124,7 +202,7 @@ for (x=[-1,1])
           -1])
          cylinder (r=fillet_r, h=base_h+2,$fa=1, $fs=0.5);
     
-  //Largo en X, y corto en Y
+  //Length along X, width along Y
   translate([(base_filtro_x-filt_supp_d)/2,
             -(filt_supp_w/2-fillet_r),
             -1]) 
@@ -216,23 +294,24 @@ module vastago_tornillo (radio)
 }
 
 
-// Dimension del hueco
-//grosor_atrapa_gt2 = 2.8; //el grosor del gt2 es 1.38mm, como van dos pegadas, seria como 2mm, le pongo 2.8
-grosor_atrapa_gt2 = 3;
+// Belt clamp hole thickness
+//GT2 thickness is 1.38mm, since there are 2 belts clamped, it would be around
+// 2mm, but 3 including tolerances:
+belt_clamp_t = 3;
 
-// Dimensiones del bloque que atrapa la correa: bl
-largo_bl_atrapa_gt2 = 14;
-alto_bl_atrapa_gt2 = 8; // el ancho (que es alto) de la correa es 6mm
-x_bl_atrapa_gt2 = (hold_d-grosor_atrapa_gt2)/2;
+// Belt clamp length
+belt_clamp_l = 14;
+belt_clamp_h = 8; // width of the belt is 6 (+2) -> height of the clamp
+belt_clamp_blk_t = (hold_d-belt_clamp_t)/2;
 
-//pos_z_atrapa_gt2 = low_hole_z + boltrow1_2_dist;
-//pos_z_atrapa_gt2 = hold_h - alto_bl_atrapa_gt2;
-pos_z_atrapa_gt2 = hold_h;
+//pos_z_belt = low_hole_z + boltrow1_2_dist;
+//pos_z_belt = hold_h - belt_clamp_h;
+pos_z_belt = hold_h;
 
 // referenciado a la esquina izquierda trasera
 module atrapa_gt2 () 
 {
-    translate ([-despl_sop_guia_x,-sop_guia_y/2,pos_z_atrapa_gt2]) cube([x_bl_atrapa_gt2, largo_bl_atrapa_gt2, alto_bl_atrapa_gt2]);
+    translate ([-despl_sop_guia_x,-sop_guia_y/2,pos_z_belt]) cube([belt_clamp_blk_t, belt_clamp_l, belt_clamp_h]);
 }
 
 // ---------------------- blocks to catch the belt -------------------
@@ -255,15 +334,15 @@ module rodea_gt2 ()
   // El cilindro para que la correa le rodee
   // La x la pongo a cero porque con la rotacion se queda descuadrada, y la muevo luego
   translate ([0,
-              -sop_guia_y/2+largo_bl_atrapa_gt2+radio_atrapa_gt2_gr*2+distancia_bloque_atrapa_cilindro,
-               pos_z_atrapa_gt2])
-    cylinder (r=radio_atrapa_gt2_gr, h=alto_bl_atrapa_gt2,$fa=1, $fs=0.5);
+              -sop_guia_y/2+belt_clamp_l+radio_atrapa_gt2_gr*2+distancia_bloque_atrapa_cilindro,
+               pos_z_belt])
+    cylinder (r=radio_atrapa_gt2_gr, h=belt_clamp_h,$fa=1, $fs=0.5);
 
   // El cilindro pequeno
   translate ([0,
-              -sop_guia_y/2+largo_bl_atrapa_gt2+distancia_bloque_atrapa_cilindro,
-              pos_z_atrapa_gt2])
-     cylinder (r=radio_atrapa_gt2_pq, h=alto_bl_atrapa_gt2,$fa=1, $fs=0.5);
+              -sop_guia_y/2+belt_clamp_l+distancia_bloque_atrapa_cilindro,
+              pos_z_belt])
+     cylinder (r=radio_atrapa_gt2_pq, h=belt_clamp_h,$fa=1, $fs=0.5);
   }
 }
 
@@ -278,14 +357,14 @@ difference () {
     translate ([-despl_sop_guia_x+hold_d/2,0,0]) rotate ([0,0,180]) rodea_gt2();
       // Los bloques paralaleos que atrapan la correa
     atrapa_gt2();
-    translate ([hold_d-x_bl_atrapa_gt2,0,0]) atrapa_gt2();
-    translate ([0,sop_guia_y-largo_bl_atrapa_gt2,0]) atrapa_gt2();
-    translate ([hold_d-x_bl_atrapa_gt2,sop_guia_y-largo_bl_atrapa_gt2,0]) atrapa_gt2();
+    translate ([hold_d-belt_clamp_blk_t,0,0]) atrapa_gt2();
+    translate ([0,sop_guia_y-belt_clamp_l,0]) atrapa_gt2();
+    translate ([hold_d-belt_clamp_blk_t,sop_guia_y-belt_clamp_l,0]) atrapa_gt2();
   }
 
 // Cubo que hace el hueco para que vayan las atrapa guias
-//translate ([-despl_sop_guia_x-1,-sop_guia_y/2-1,pos_z_atrapa_gt2]) cube([hold_d+2, y_hueco_atrapa_gt2_mn, alto_bl_atrapa_gt2+1]);
-//translate ([-despl_sop_guia_x-1,sop_guia_y/2-y_hueco_atrapa_gt2_mn+1,pos_z_atrapa_gt2]) cube([hold_d+2, y_hueco_atrapa_gt2_mn, alto_bl_atrapa_gt2+1]);
+//translate ([-despl_sop_guia_x-1,-sop_guia_y/2-1,pos_z_belt]) cube([hold_d+2, y_hueco_atrapa_gt2_mn, belt_clamp_h+1]);
+//translate ([-despl_sop_guia_x-1,sop_guia_y/2-y_hueco_atrapa_gt2_mn+1,pos_z_belt]) cube([hold_d+2, y_hueco_atrapa_gt2_mn, belt_clamp_h+1]);
     
 tornillo (m4_r, cabeza_m4_r);
 // Taladros de Thorlabs
@@ -320,8 +399,8 @@ hull () {
 
 
 // Los redondeos de las esquinas
-translate([-despl_sop_guia_x, sop_guia_y/2,0]) redondeo_mxy(r_fillet=2, h_fillet= pos_z_atrapa_gt2+alto_bl_atrapa_gt2);
-translate([-despl_sop_guia_x, -sop_guia_y/2,0]) redondeo_mxmy(r_fillet=2, h_fillet= pos_z_atrapa_gt2+alto_bl_atrapa_gt2);
+translate([-despl_sop_guia_x, sop_guia_y/2,0]) redondeo_mxy(r_fillet=2, h_fillet= pos_z_belt+belt_clamp_h);
+translate([-despl_sop_guia_x, -sop_guia_y/2,0]) redondeo_mxmy(r_fillet=2, h_fillet= pos_z_belt+belt_clamp_h);
 
 }
 
