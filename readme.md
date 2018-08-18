@@ -15,13 +15,17 @@ Designed with [OpenSCAD](http://www.openscad.org)
 
  oscad_utils: are OpenSCAD functions to make bolts, chamfers and fillets, check https://github.com/felipe-m/oscad_utils
 
-##Step by step explanations:
+## Step by step explanations:
 1. [idler_tensioner.md](./idler_tensioner.md) Detailed explanation for the idler tensioner
 ![Idler Tensioner](imgs/small/idler_tensioner.png )
 1. [tensioner_holder.md](./tensioner_holder.md) Detailed explanation for the tensioner holder
 ![Tensioner Holder](imgs/small/tens_holder.png )
 
+## Design with no step by step explanations:
 
-You can compare the same pieces using FreeCAD: https://github.com/felipe-m/freecad_filter_stage
+[Filter Holder](src/filter_holder.scad) ![Filter Holder](imgs/small/filter_holder.png)
+
+
+**You can compare the same pieces using FreeCAD:** https://github.com/felipe-m/freecad_filter_stage
 
 
