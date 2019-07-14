@@ -145,6 +145,14 @@
 
 use  <oscad_utils/chamfer.scad>
 
+// use these values for fast generation time but rough surfaces
+//$fa=1;
+//$fs=1.5;
+// use these values for slow generation time but defined surfaces
+$fa=0.5;
+$fs=0.5;
+
+
 // Dimensions of the filter, taking this filter dimensions: lf102249
 // http://www.deltaopticalthinfilm.com/product/lv-vis-bandpass-filter-b/
 
@@ -251,7 +259,8 @@ for (x=[-1,1])
           base_d/2 + x * (filt_supp_d/2-fillet_r),
           y * (filt_supp_w/2 - fillet_r),
           -1])
-         cylinder (r=fillet_r, h=base_h+2,$fa=1, $fs=0.5);
+         cylinder (r=fillet_r, h=base_h+2);
+         //cylinder (r=fillet_r, h=base_h+2,$fa=1, $fs=0.5);
     
   //Length along X, width along Y
   translate([(base_d-filt_supp_d)/2,
@@ -288,10 +297,12 @@ module bolt (radio, head_r)
 {
   union () {
     translate([-hole_x,0,low_hole_z])rotate([0,90,0])
-      cylinder(r=radio, h=hold_d, $fa=1, $fs=0.5);
+      cylinder(r=radio, h=hold_d);
+      //cylinder(r=radio, h=hold_d, $fa=1, $fs=0.5);
 
     translate([0,0,low_hole_z])rotate([0,90,0])
-      cylinder(r=head_r,h= hold_d-despl_sop_guia_x+1,$fa=1, $fs=0.5);
+      cylinder(r=head_r,h= hold_d-despl_sop_guia_x+1);
+      //cylinder(r=head_r,h= hold_d-despl_sop_guia_x+1,$fa=1, $fs=0.5);
 }
 }
 
@@ -300,13 +311,15 @@ module bolt (radio, head_r)
 module bolt_head (head_r)
 {
     translate([0,0,low_hole_z])rotate([0,90,0])
-      cylinder(r=head_r,h= hold_d-despl_sop_guia_x+1,$fa=1, $fs=0.5);
+      cylinder(r=head_r,h= hold_d-despl_sop_guia_x+1);
+      //cylinder(r=head_r,h= hold_d-despl_sop_guia_x+1,$fa=1, $fs=0.5);
 }
 
 module bolt_shank (radio)
 {
     translate([-hole_x,0,low_hole_z])rotate([0,90,0])
-      cylinder(r=radio, h=hold_d, $fa=1, $fs=0.5);    
+      cylinder(r=radio, h=hold_d);    
+      //cylinder(r=radio, h=hold_d, $fa=1, $fs=0.5);    
 }
 
 
@@ -353,13 +366,15 @@ module belt_post ()
   translate ([0,
               -hold_w/2+beltclamp_l+lr_beltpost_r*2+clamp2cenpost,
                pos_z_belt])
-    cylinder (r=lr_beltpost_r, h=beltclamp_h,$fa=1, $fs=0.5);
+    cylinder (r=lr_beltpost_r, h=beltclamp_h);
+    //cylinder (r=lr_beltpost_r, h=beltclamp_h,$fa=1, $fs=0.5);
 
   // small cylinder
   translate ([0,
               -hold_w/2+beltclamp_l+clamp2cenpost,
               pos_z_belt])
-     cylinder (r=sm_beltpost_r, h=beltclamp_h,$fa=1, $fs=0.5);
+     cylinder (r=sm_beltpost_r, h=beltclamp_h);
+     //cylinder (r=sm_beltpost_r, h=beltclamp_h,$fa=1, $fs=0.5);
   }
 }
 

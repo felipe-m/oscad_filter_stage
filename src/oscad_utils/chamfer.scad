@@ -26,7 +26,8 @@ module redondeo (r_fillet, h_fillet)
   {
    // el -1, -2 y 2, 4 es para la diferencia interna, y luego para quitar cuando se haga el chaflan
   translate([0,0,-1])cube([r_fillet+1,r_fillet+1,h_fillet+2]);
-  translate([0,0,-2])cylinder(r=r_fillet, h=h_fillet+4, $fa=1, $fs=0.5);
+  translate([0,0,-2])cylinder(r=r_fillet, h=h_fillet+4);
+  //translate([0,0,-2])cylinder(r=r_fillet, h=h_fillet+4, $fa=1, $fs=0.5);
   }
 }
 

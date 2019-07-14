@@ -40,10 +40,12 @@ module bolt_hole (r_shank, l_bolt, r_head, l_head, hex_head, h_layer3d, mnfold)
     // if mnfold == 1 it will make the translations and make the piece 
     // larger
     translate([0,0,-mnfold])
-      cylinder (r= r_shank, h= l_bolt+2*mnfold, $fa=1, $fs=0.5);
+      cylinder (r= r_shank, h= l_bolt+2*mnfold);
+      //cylinder (r= r_shank, h= l_bolt+2*mnfold, $fa=1, $fs=0.5);
    if (hex_head == 0) {
       translate([0,0,-mnfold])
-        cylinder (r= r_head, h= l_head+mnfold, $fa=1, $fs=0.5);  
+        cylinder (r= r_head, h= l_head+mnfold);  
+        //cylinder (r= r_head, h= l_head+mnfold, $fa=1, $fs=0.5);  
    } else {
       translate([0,0,-mnfold])
       cylinder (r= r_head, h= l_head+mnfold, $fn=6);  
@@ -62,7 +64,8 @@ module bolt_hole (r_shank, l_bolt, r_head, l_head, hex_head, h_layer3d, mnfold)
       // take vetexs away:
       if (hex_head == 0) {
         translate([0,0,l_head])
-          cylinder (r= r_head, h= h_layer3d, $fa=1, $fs=0.5);       
+          cylinder (r= r_head, h= h_layer3d);       
+          //cylinder (r= r_head, h= h_layer3d, $fa=1, $fs=0.5);       
       } else {
         translate([0,0,l_head])
           cylinder (r= r_head, h= h_layer3d, $fn=6);           

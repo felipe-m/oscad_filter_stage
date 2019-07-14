@@ -34,7 +34,8 @@ module base_fillet_dif (r, h, fillet)
     {
      // -1, -2 y 2, 4 is to make the difference
      translate([0,0,-1])cube([r+1,r+1,h+2]);
-     translate([0,0,-2])cylinder(r=r, h=h+4, $fa=1, $fs=0.5);
+     translate([0,0,-2])cylinder(r=r, h=h+4,);
+     //translate([0,0,-2])cylinder(r=r, h=h+4, $fa=1, $fs=0.5);
     }
   } else { // chamfer
     difference ()
@@ -205,7 +206,8 @@ module base_fillet_add (r, h, fillet)
     {
 
      cube([r+nmf_add,r+nmf_add,h]);
-     translate([0,0,-1])cylinder(r=r, h=h+2, $fa=1, $fs=0.5);
+     translate([0,0,-1])cylinder(r=r, h=h+2);
+     //translate([0,0,-1])cylinder(r=r, h=h+2, $fa=1, $fs=0.5);
     }
   } else { // chamfer
     difference ()

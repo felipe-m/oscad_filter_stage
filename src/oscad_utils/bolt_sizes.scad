@@ -19,8 +19,8 @@ tol =  0.4;
 stol = 0.2;
 
 h_layer3d = 0.3;
-$fa=1;
-$fs=0.5;
+//$fa=1;
+//$fs=0.5;
 
 // Nuts and bolt sizes
 m3_r = 1.5;  
